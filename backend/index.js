@@ -7,11 +7,11 @@ const mongoose = require("mongoose");
 const PORT = process.env.PORT || 5000;
 require("dotenv").config();
 
-//middleware
+//! middleware
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:5175"],
+    origin: ["http://localhost:5173"],
     credentials: true,
   })
 );
@@ -27,7 +27,7 @@ async function main() {
   await mongoose.connect(process.env.DB_URL);
 
   app.use("/", (req, res) => {
-    res.send("Book Store Server is runniung!");
+    res.send("Book Store Server is running!");
   });
 }
 

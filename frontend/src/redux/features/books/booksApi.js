@@ -1,31 +1,30 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import getBaseUrl from "../../../utils/baseURL";
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import getBaseUrl from '../../../utils/baseURL'
 
-
-const baseQuery = fetchBaseQuery({
+const  baseQuery = fetchBaseQuery({
     baseUrl: `${getBaseUrl()}/api/books`,
     credentials: 'include',
-    prepareHeaders: (Headers) =>{
-        const token = localStorage.getItem('token');
-        if(token){
-            Headers.set('Authorization', `Beasrer ${token}`);
+    prepareHeaders: (Headers) => {
+        const token =  localStorage.getItem('token');
+        if(token) {
+            Headers.set('Authorization', `Bearer ${token}`);
         }
         return Headers;
     }
 })
 
 const booksApi = createApi({
-    reducerPath: 'bookApi',
+    reducerPath: 'booksApi',
     baseQuery,
     tagTypes: ['Books'],
-    endpoints: (builder) => ({
+    endpoints: (builder) =>({
         fetchAllBooks: builder.query({
             query: () => "/",
-            providesTags: ['Books']
+            providesTags: ["Books"]
         }),
         fetchBookById: builder.query({
             query: (id) => `/${id}`,
-            providesTags: (results, error, id) => [{type: "Books", id}],
+            providesTags: (result, error, id) => [{ type: "Books", id }],
         }),
         addBook: builder.mutation({
             query: (newBook) => ({
@@ -41,20 +40,20 @@ const booksApi = createApi({
                 method: "PUT",
                 body: rest,
                 headers: {
-                    'Content-Type' : 'application/json'
+                    'Content-Type': 'application/json'
                 }
             }),
             invalidatesTags: ["Books"]
         }),
-        deleteBook : builder.mutation({
-            query : (id) =>({
-                url : `/${id}`,
-                method : "DELETE"
+        deleteBook: builder.mutation({
+            query: (id) => ({
+                url: `/${id}`,
+                method: "DELETE"
             }),
-            invalidatesTags : ["Books"]
+            invalidatesTags: ["Books"]
         })
-    }),
-  })
+    })
+})
 
-  export const {useFetchAllBooksQuery, useFetchBookByIdQuery, useAddBookMutation, useUpdateBookMutation, useDeleteBookMutation} = booksApi;
-  export default booksApi;
+export const {useFetchAllBooksQuery, useFetchBookByIdQuery, useAddBookMutation, useUpdateBookMutation, useDeleteBookMutation} = booksApi;
+export default booksApi;
